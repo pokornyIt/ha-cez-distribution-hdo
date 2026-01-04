@@ -1,0 +1,10 @@
+{
+  "domain": "cez_distribution_hdo",
+  "name": "ČEZ Distribuce HDO",
+  "version": "0.2.0",
+  "documentation": "https://github.com/pokornyIt/ha-cez-distribution-hdo",
+  "issue_tracker": "https://github.com/pokornyIt/ha-cez-distribution-hdo/issues",
+  "codeowners": ["@pokornyIt"],
+  "requirements": ["cez-distribution-hdo==0.2.0"],
+  "iot_class": "cloud_polling"
+}

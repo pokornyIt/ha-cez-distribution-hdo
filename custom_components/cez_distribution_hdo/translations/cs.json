@@ -1,0 +1,77 @@
+{
+    "config": {
+        "step": {
+            "user": {
+                "title": "ČEZ Distribuce HDO",
+                "description": "Zadejte EAN odběrného místa. Integrace načte dostupné HDO signály pro daný EAN. Volitelně můžete zadat prefix, který se použije pro pojmenování zařízení a entit.",
+                "data": {
+                    "ean": "EAN kód",
+                    "prefix": "Volitelný prefix"
+                }
+            },
+            "signal": {
+                "title": "Výběr HDO signálu",
+                "description": "Pro tento EAN bylo nalezeno více HDO signálů. Vyberte signál, který chcete přidat jako zařízení.",
+                "data": {
+                    "signal": "HDO signál"
+                }
+            }
+        },
+        "error": {
+            "cannot_connect": "Nepodařilo se připojit k ČEZ Distribuci nebo získat data.",
+            "no_signals": "Pro zadaný EAN nebyly nalezeny žádné HDO signály. Zkontrolujte EAN a zkuste to znovu.",
+            "invalid_ean": "EAN musí mít přesně 18 číslic.",
+            "invalid_prefix": "Prefix obsahuje nepodporované znaky. Používejte písmena/číslice a mezery."
+        },
+        "abort": {
+            "already_configured": "Tento EAN a HDO signál už je nakonfigurovaný."
+        }
+    },
+    "options": {
+        "step": {
+            "init": {
+                "title": "Možnosti",
+                "description": "Nastavení volitelných parametrů.",
+                "data": {
+                    "prefix": "Volitelný prefix"
+                }
+            }
+        }
+    },
+    "entity": {
+        "binary_sensor": {
+            "low_tariff": {
+                "name": "Nízký tarif"
+            }
+        },
+        "sensor": {
+            "actual_tariff": {
+                "name": "Aktuální tarif"
+            },
+            "actual_tariff_start": {
+                "name": "Začátek aktuálního tarifu"
+            },
+            "actual_tariff_end": {
+                "name": "Konec aktuálního tarifu"
+            },
+            "next_low_tariff_start": {
+                "name": "Příští začátek NT"
+            },
+            "next_low_tariff_end": {
+                "name": "Příští konec NT"
+            },
+            "next_high_tariff_start": {
+                "name": "Příští začátek VT"
+            },
+            "next_high_tariff_end": {
+                "name": "Příští konec VT"
+            },
+            "next_switch": {
+                "name": "Příští přepnutí"
+            },
+            "remain_actual": {
+                "name": "Zbývá do přepnutí"
+            }
+        }
+    }
+}

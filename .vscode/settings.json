@@ -1,0 +1,16 @@
+{
+    "cSpell.words": [
+        "Distribuce",
+        "HACS",
+        "hass",
+        "homeassistant"
+    ],
+    "cSpell.ignorePaths": [
+        "vscode-extension",
+        ".git/{info,lfs,logs,refs,objects}/**",
+        ".git/{index,*refs,*HEAD}",
+        "uv.lock",
+        ".vscode",
+        "README.cs.md"
+    ]
+}
