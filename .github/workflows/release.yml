@@ -1,0 +1,131 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version to release (e.g. 0.2.0 or 0.2.0-rc1)"
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Validate version format (SemVer + optional -rcN)
+        shell: bash
+        run: |
+          V="${{ inputs.version }}"
+          # Allow: X.Y.Z or X.Y.Z-rcN
+          if ! echo "$V" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+(-rc[0-9]+)?$'; then
+            echo "Invalid version: $V"
+            echo "Expected: X.Y.Z or X.Y.Z-rcN (e.g. 0.1.0 or 0.1.0-rc1)"
+            exit 1
+          fi
+
+      - name: Bump manifest.json + pyproject.toml versions
+        env:
+          VERSION: ${{ inputs.version }}
+          MANIFEST: custom_components/cez_distribution_hdo/manifest.json
+          PYPROJECT: pyproject.toml
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          import re
+          from pathlib import Path
+
+          version = os.environ["VERSION"]
+          manifest_path = Path(os.environ["MANIFEST"])
+          pyproject_path = Path(os.environ["PYPROJECT"])
+
+          # --- manifest.json ---
+          manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+          manifest["version"] = version
+          manifest_path.write_text(
+              json.dumps(manifest, ensure_ascii=False, indent=2) + "\n",
+              encoding="utf-8",
+          )
+
+          # --- pyproject.toml: update [project].version ---
+          txt = pyproject_path.read_text(encoding="utf-8").splitlines(keepends=True)
+
+          # Find [project] section bounds
+          start = None
+          end = None
+          for i, line in enumerate(txt):
+              if re.match(r"^\[project\]\s*$", line):
+                  start = i
+                  break
+          if start is None:
+              raise SystemExit("pyproject.toml does not contain a [project] section")
+
+          for j in range(start + 1, len(txt)):
+              if re.match(r"^\[.+\]\s*$", txt[j]):  # next section header
+                  end = j
+                  break
+          if end is None:
+              end = len(txt)
+
+          # Replace existing version line inside [project]
+          version_re = re.compile(r'^(version\s*=\s*)".*?"\s*(#.*)?\n?$')
+          replaced = False
+          for k in range(start + 1, end):
+              m = version_re.match(txt[k])
+              if m:
+                  prefix = m.group(1)
+                  comment = m.group(2) or ""
+                  newline = "\n" if txt[k].endswith("\n") else ""
+                  txt[k] = f'{prefix}"{version}"{comment}{newline}'
+                  replaced = True
+                  break
+
+          if not replaced:
+              # Insert version line right after [project]
+              insert_at = start + 1
+              txt.insert(insert_at, f'version = "{version}"\n')
+
+          pyproject_path.write_text("".join(txt), encoding="utf-8")
+
+          print(f"Updated manifest.json and pyproject.toml to version {version}")
+          PY
+
+      - name: Commit changes
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git add custom_components/cez_distribution_hdo/manifest.json pyproject.toml
+
+          # If nothing changed, don't fail the workflow
+          git diff --cached --quiet && echo "No changes to commit." && exit 0
+
+          git commit -m "chore(release): v${{ inputs.version }}"
+
+      - name: Create tag
+        shell: bash
+        run: |
+          git tag -a "v${{ inputs.version }}" -m "v${{ inputs.version }}"
+
+      - name: Push commit and tag
+        shell: bash
+        run: |
+          git push
+          git push --tags
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
+        run: |
+          gh release create "v${{ inputs.version }}" \
+            --title "v${{ inputs.version }}" \
+            --generate-notes
