@@ -12,5 +12,7 @@
         "uv.lock",
         ".vscode",
         "README.cs.md"
-    ]
+    ],
+    "git.autofetch": true,
+    "git.autofetchPeriod": 180
 }
