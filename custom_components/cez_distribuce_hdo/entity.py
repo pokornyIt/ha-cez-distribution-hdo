@@ -49,7 +49,7 @@ class CezHdoBaseEntity(CoordinatorEntity[CezHdoCoordinator]):
             "identifiers": {(DOMAIN, self._entry.entry_id)},
             "name": self._coordinator.base_object_prefix,
             "manufacturer": "ČEZ Distribuce",
-            "serial_number": self._signal,
+            "model_id": self._signal,
             "model": "HDO",
             "configuration_url": "https://dip.cezdistribuce.cz/irj/portal/anonymous/casy-spinani/",
         }

@@ -14,7 +14,7 @@ from cez_distribution_hdo import TariffService, sanitize_signal_for_entity
 
 from .const import CONF_EAN, CONF_PREFIX, CONF_SIGNAL, DEFAULT_PREFIX, DOMAIN
 
-EAN_RE = re.compile(r"^\d{18}$")
+EAN_RE = re.compile(r"^8591824\d\d[45678]\d{8}$")
 PREFIX_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_-]{0,31}$")  # max 32 chars
 
 
@@ -87,7 +87,7 @@ class CezDistributionHdoConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             # Avoid putting full EAN into the entry title (keep it simple)
             sig = sanitize_signal_for_entity(signal)  # a1b4pd04 -> a1b4pd04 (sanitized)
             prefix = prefix or DEFAULT_PREFIX
-            title = f"{prefix}_{sig}"
+            title = f"{prefix} {sig}"
             return self.async_create_entry(title=title, data=data, options=options)
 
         schema = vol.Schema({vol.Required(CONF_SIGNAL): vol.In(signals)})
