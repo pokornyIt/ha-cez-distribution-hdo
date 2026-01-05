@@ -12,5 +12,5 @@
   "requirements": [
     "cez-distribution-hdo==0.2.0"
   ],
-  "version": "0.3.0-beta2"
+  "version": "0.3.0-beta3"
 }
