@@ -16,11 +16,11 @@ from homeassistant.const import UnitOfTime
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
-from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from homeassistant.util import dt as dt_util
 
 from .const import CONF_PREFIX, CONF_SIGNAL, DOMAIN
 from .coordinator import CezHdoCoordinator
+from .entity import CezHdoBaseEntity
 from .utils import object_prefix
 
 
@@ -125,15 +125,13 @@ async def async_setup_entry(
     async_add_entities: AddEntitiesCallback,
 ) -> None:
     coordinator: CezHdoCoordinator = hass.data[DOMAIN][entry.entry_id]
-    async_add_entities(
-        [
-            CezHdoSensorEntity(coordinator=coordinator, entry=entry, description=desc)
-            for desc in SENSOR_DESCRIPTIONS
-        ]
-    )
+    for desc in SENSOR_DESCRIPTIONS:
+        async_add_entities(
+            [CezHdoSensorEntity(coordinator=coordinator, entry=entry, description=desc)]
+        )
 
 
-class CezHdoSensorEntity(CoordinatorEntity[CezHdoCoordinator], SensorEntity):
+class CezHdoSensorEntity(CezHdoBaseEntity, SensorEntity):
     entity_description: CezHdoSensorDescription
 
     def __init__(
@@ -142,28 +140,8 @@ class CezHdoSensorEntity(CoordinatorEntity[CezHdoCoordinator], SensorEntity):
         entry: ConfigEntry,
         description: CezHdoSensorDescription,
     ) -> None:
-        super().__init__(coordinator)
+        super().__init__(coordinator, entry, description.key)
         self.entity_description = description
-        self._entry = entry
-
-        # ean = entry.data[CONF_EAN]
-        signal = entry.data[CONF_SIGNAL]
-        prefix: str = object_prefix(entry.options.get(CONF_PREFIX, "") or "", signal, ":")
-
-        self._attr_unique_id = f"{prefix}:{description.key}"
-
-        # Force exact default entity_id via suggested object_id
-        self._attr_suggested_object_id = (
-            f"{coordinator.base_object_prefix}_{description.key}"
-        )
-
-        self._attr_device_info = DeviceInfo(
-            identifiers={(DOMAIN, entry.entry_id)},
-            name=coordinator.base_object_prefix,
-            manufacturer="ČEZ Distribuce",
-            # model="HDO",
-            configuration_url="https://dip.cezdistribuce.cz/irj/portal/anonymous/casy-spinani/",
-        )
 
     @property
     def native_value(self):
