@@ -1,6 +1,6 @@
 [project]
 name = "ha-cez-distribution-hdo"
-version = "0.2.0-rc1"
+version = "0.3.0-alpha1"
 description = "HomeAssistant integration for CEZ Distribution HDO."
 authors = [
     { name = "pokornyIt", email = "8665714+pokornyIt@users.noreply.github.com" },
