@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: "Version to release (e.g. 0.2.0 or 0.2.0-rc1)"
+        description: "Version to release (e.g. 0.2.0, 0.2.0-rc1, 0.2.0-beta1, 0.2.0-alpha1)"
         required: true
         type: string
 
@@ -19,14 +19,14 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Validate version format (SemVer + optional -rcN)
+      - name: Validate version format (SemVer + optional -alphaN |-betaN |-rcN)
         shell: bash
         run: |
           V="${{ inputs.version }}"
-          # Allow: X.Y.Z or X.Y.Z-rcN
-          if ! echo "$V" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+(-rc[0-9]+)?$'; then
+          # Allow: X.Y.Z or X.Y.Z-(alpha|beta|rc)N
+          if ! echo "$V" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+(-(alpha|beta|rc)[0-9]+)?$'; then
             echo "Invalid version: $V"
-            echo "Expected: X.Y.Z or X.Y.Z-rcN (e.g. 0.1.0 or 0.1.0-rc1)"
+            echo "Expected: X.Y.Z or X.Y.Z-(alpha|beta|rc)N (e.g. 0.1.0, 0.1.0-rc1, 0.1.0-beta1, 0.1.0-alpha1)"
             exit 1
           fi
 
