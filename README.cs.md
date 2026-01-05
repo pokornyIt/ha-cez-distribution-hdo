@@ -77,8 +77,8 @@ Stejná data o časech spínání HDO jsou dostupná také na oficiálním port�
 
 1. Stáhni poslední release z:
    - https://github.com/pokornyIt/ha-cez-distribution-hdo/releases
-2. Zkopíruj složku `custom_components/cez_distribution_hdo` do konfigurace Home Assistant:
-   - `<config>/custom_components/cez_distribution_hdo`
+2. Zkopíruj složku `custom_components/cez_distribuce_hdo` do konfigurace Home Assistant:
+   - `<config>/custom_components/cez_distribuce_hdo`
 3. Restartuj Home Assistant.
 
 ---
