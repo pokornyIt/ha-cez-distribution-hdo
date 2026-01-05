@@ -10,7 +10,7 @@ import voluptuous as vol
 from homeassistant import config_entries
 from homeassistant.helpers import config_validation as cv
 
-from cez_distribution_hdo import TariffService, sanitize_signal_for_entity
+from cez_distribution_hdo import TariffService
 
 from .const import CONF_EAN, CONF_PREFIX, CONF_SIGNAL, DEFAULT_PREFIX, DOMAIN
 
