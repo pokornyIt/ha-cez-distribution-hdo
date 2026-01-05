@@ -14,7 +14,6 @@ class CezHdoBaseEntity(CoordinatorEntity):
 
     _coordinator: CezHdoCoordinator
     _attr_has_entity_name = True
-    _description: EntityDescription
     _entry: ConfigEntry
     _signal: str
 
@@ -28,7 +27,6 @@ class CezHdoBaseEntity(CoordinatorEntity):
         super().__init__(coordinator)
 
         self._coordinator = coordinator
-        self._description = description
         self._entry = entry
         self._signal = entry.data[CONF_SIGNAL]
 
