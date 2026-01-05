@@ -19,8 +19,9 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from homeassistant.util import dt as dt_util
 
-from .const import CONF_EAN, CONF_SIGNAL, DOMAIN
+from .const import CONF_PREFIX, CONF_SIGNAL, DOMAIN
 from .coordinator import CezHdoCoordinator
+from .utils import object_prefix
 
 
 @dataclass(frozen=True, kw_only=True)
@@ -46,7 +47,7 @@ def _dt(v: Any) -> datetime | None:
     return None
 
 
-DESCRIPTIONS: tuple[CezHdoSensorDescription, ...] = (
+SENSOR_DESCRIPTIONS: tuple[CezHdoSensorDescription, ...] = (
     CezHdoSensorDescription(
         key="actual_tariff",
         translation_key="actual_tariff",
@@ -127,7 +128,7 @@ async def async_setup_entry(
     async_add_entities(
         [
             CezHdoSensorEntity(coordinator=coordinator, entry=entry, description=desc)
-            for desc in DESCRIPTIONS
+            for desc in SENSOR_DESCRIPTIONS
         ]
     )
 
@@ -145,10 +146,11 @@ class CezHdoSensorEntity(CoordinatorEntity[CezHdoCoordinator], SensorEntity):
         self.entity_description = description
         self._entry = entry
 
-        ean = entry.data[CONF_EAN]
+        # ean = entry.data[CONF_EAN]
         signal = entry.data[CONF_SIGNAL]
+        prefix: str = object_prefix(entry.options.get(CONF_PREFIX, "") or "", signal, ":")
 
-        self._attr_unique_id = f"{ean}:{signal}:{description.key}"
+        self._attr_unique_id = f"{prefix}:{description.key}"
 
         # Force exact default entity_id via suggested object_id
         self._attr_suggested_object_id = (
@@ -159,7 +161,7 @@ class CezHdoSensorEntity(CoordinatorEntity[CezHdoCoordinator], SensorEntity):
             identifiers={(DOMAIN, entry.entry_id)},
             name=coordinator.base_object_prefix,
             manufacturer="ČEZ Distribuce",
-            model="HDO",
+            # model="HDO",
             configuration_url="https://dip.cezdistribuce.cz/irj/portal/anonymous/casy-spinani/",
         )
 

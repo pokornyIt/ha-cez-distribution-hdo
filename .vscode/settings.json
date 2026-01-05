@@ -1,9 +1,11 @@
 {
     "cSpell.words": [
+        "codeowners",
         "Distribuce",
         "HACS",
         "hass",
-        "homeassistant"
+        "homeassistant",
+        "pokorny"
     ],
     "cSpell.ignorePaths": [
         "vscode-extension",

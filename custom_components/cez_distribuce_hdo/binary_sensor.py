@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+import logging
 from typing import Any, Callable
 
 from homeassistant.components.binary_sensor import (
@@ -15,8 +16,12 @@ from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
-from .const import CONF_EAN, CONF_SIGNAL, DOMAIN
+from custom_components.cez_distribuce_hdo.utils import object_prefix  # pyright: ignore [reportAttributeAccessIssue]
+
+from .const import CONF_PREFIX, CONF_SIGNAL, DOMAIN
 from .coordinator import CezHdoCoordinator
+
+_LOGGER = logging.getLogger(__name__)
 
 
 @dataclass(frozen=True, kw_only=True)
@@ -24,7 +29,7 @@ class CezHdoBinaryDescription(BinarySensorEntityDescription):
     value_fn: Callable[[dict[str, Any]], bool | None]
 
 
-DESCRIPTIONS: tuple[CezHdoBinaryDescription, ...] = (
+BINARY_SENSOR_DESCRIPTIONS: tuple[CezHdoBinaryDescription, ...] = (
     CezHdoBinaryDescription(
         key="low_tariff",
         translation_key="low_tariff",
@@ -43,7 +48,7 @@ async def async_setup_entry(
     async_add_entities(
         [
             CezHdoBinaryEntity(coordinator=coordinator, entry=entry, description=desc)
-            for desc in DESCRIPTIONS
+            for desc in BINARY_SENSOR_DESCRIPTIONS
         ]
     )
 
@@ -61,11 +66,13 @@ class CezHdoBinaryEntity(CoordinatorEntity[CezHdoCoordinator], BinarySensorEntit
         self.entity_description = description
         self._entry = entry
 
-        ean = entry.data[CONF_EAN]
         signal = entry.data[CONF_SIGNAL]
+        prefix: str = object_prefix(
+            entry.options.get(CONF_PREFIX, "") or "", signal, ":"
+        )
 
         # Stable unique_id for entity registry
-        self._attr_unique_id = f"{ean}:{signal}:{description.key}"
+        self._attr_unique_id = f"{prefix}:{description.key}"
 
         # Force exact default entity_id via suggested object_id
         self._attr_suggested_object_id = (

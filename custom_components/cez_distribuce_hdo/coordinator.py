@@ -10,17 +10,16 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 from homeassistant.util import dt as dt_util
-from homeassistant.util import slugify
 
 from .const import (
     CONF_EAN,
     CONF_PREFIX,
     CONF_SIGNAL,
-    DEFAULT_PREFIX,
     DEFAULT_REFRESH_INTERVAL_SECONDS,
     DEFAULT_UPDATE_INTERVAL_SECONDS,
     DOMAIN,
 )
+from .utils import object_prefix
 
 from cez_distribution_hdo import (
     ApiError,
@@ -28,25 +27,10 @@ from cez_distribution_hdo import (
     InvalidRequestError,
     InvalidResponseError,
     TariffService,
-    sanitize_signal_for_entity,
     snapshot_to_dict,
 )
 
 _LOGGER = logging.getLogger(__name__)
-
-
-def _is_naive(dt: datetime) -> bool:
-    return dt.tzinfo is None or dt.tzinfo.utcoffset(dt) is None
-
-
-def _object_prefix(prefix: str, signal: str) -> str:
-    """Return base object_id prefix: 'hdo_<signal>' or '<prefix>_<signal>'."""
-    sig = sanitize_signal_for_entity(
-        signal
-    )  # e.g., 'čez' -> 'cez', 'tariff-1' -> 'tariff_1'
-    if prefix:
-        return f"{slugify(prefix)}_{sig}"
-    return f"{DEFAULT_PREFIX}_{sig}"
 
 
 class CezHdoCoordinator(DataUpdateCoordinator[dict[str, Any]]):
@@ -56,7 +40,7 @@ class CezHdoCoordinator(DataUpdateCoordinator[dict[str, Any]]):
 
         self.ean: str = entry.data[CONF_EAN]
         self.signal: str = entry.data[CONF_SIGNAL]
-        self.prefix: str = entry.options.get(CONF_PREFIX, "")
+        self.prefix: str = entry.options.get(CONF_PREFIX, "") or ""
 
         tz_name = hass.config.time_zone or "UTC"
         tz = dt_util.get_time_zone(tz_name) or dt_util.UTC
@@ -77,7 +61,7 @@ class CezHdoCoordinator(DataUpdateCoordinator[dict[str, Any]]):
 
     @property
     def base_object_prefix(self) -> str:
-        return _object_prefix(self.prefix, self.signal)
+        return object_prefix(self.prefix, self.signal)
 
     @property
     def device_identifier(self) -> str:
