@@ -85,9 +85,9 @@ class CezDistributionHdoConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             }
 
             # Avoid putting full EAN into the entry title (keep it simple)
-            sig = sanitize_signal_for_entity(signal)  # a1b4pd04 -> a1b4pd04 (sanitized)
+            # sig = sanitize_signal_for_entity(signal)  # a1b4pd04 -> a1b4pd04 (sanitized)
             prefix = prefix or DEFAULT_PREFIX
-            title = f"{prefix} {sig}"
+            title = f"{prefix}"
             return self.async_create_entry(title=title, data=data, options=options)
 
         schema = vol.Schema({vol.Required(CONF_SIGNAL): vol.In(signals)})
