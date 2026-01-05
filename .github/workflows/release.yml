@@ -33,7 +33,7 @@ jobs:
       - name: Bump manifest.json + pyproject.toml versions
         env:
           VERSION: ${{ inputs.version }}
-          MANIFEST: custom_components/cez_distribution_hdo/manifest.json
+          MANIFEST: custom_components/cez_distribuce_hdo/manifest.json
           PYPROJECT: pyproject.toml
         run: |
           python - <<'PY'
@@ -103,7 +103,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          git add custom_components/cez_distribution_hdo/manifest.json pyproject.toml
+          git add custom_components/cez_distribuce_hdo/manifest.json pyproject.toml
 
           # If nothing changed, don't fail the workflow
           git diff --cached --quiet && echo "No changes to commit." && exit 0

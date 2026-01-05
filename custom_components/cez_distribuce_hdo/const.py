@@ -1,6 +1,6 @@
 """Constants for CEZ Distribution HDO integration."""
 
-DOMAIN = "cez_distribution_hdo"
+DOMAIN = "cez_distribuce_hdo"
 
 CONF_EAN = "ean"
 CONF_SIGNAL = "signal"

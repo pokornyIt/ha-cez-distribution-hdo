@@ -18,10 +18,10 @@
             }
         },
         "error": {
-            "cannot_connect": "Nepodařilo se připojit k ČEZ Distribuci nebo získat data.",
-            "no_signals": "Pro zadaný EAN nebyly nalezeny žádné HDO signály. Zkontrolujte EAN a zkuste to znovu.",
             "invalid_ean": "EAN musí mít přesně 18 číslic.",
-            "invalid_prefix": "Prefix obsahuje nepodporované znaky. Používejte písmena/číslice a mezery."
+            "invalid_prefix": "Prefix může obsahovat písmena, čísla, '_' nebo '-' (max 32 znaků).",
+            "cannot_connect": "Nepodařilo se načíst data o časech spínání.",
+            "no_signals": "Pro zadané EAN nebyly nalezeny žádné HDO signály."
         },
         "abort": {
             "already_configured": "Tento EAN a HDO signál už je nakonfigurovaný."

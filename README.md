@@ -79,8 +79,8 @@ The same HDO switching schedule data is available on the official ČEZ Distribuc
 
 1. Download the latest release from:
    - https://github.com/pokornyIt/ha-cez-distribution-hdo/releases
-2. Copy the folder `custom_components/cez_distribution_hdo` into your Home Assistant config directory:
-   - `<config>/custom_components/cez_distribution_hdo`
+2. Copy the folder `custom_components/cez_distribuce_hdo` into your Home Assistant config directory:
+   - `<config>/custom_components/cez_distribuce_hdo`
 3. Restart Home Assistant.
 
 ---

@@ -1,5 +1,5 @@
 {
-  "domain": "cez_distribution_hdo",
+  "domain": "cez_distribuce_hdo",
   "name": "ČEZ Distribuce HDO",
   "codeowners": ["@pokornyIt"],
   "config_flow": true,
