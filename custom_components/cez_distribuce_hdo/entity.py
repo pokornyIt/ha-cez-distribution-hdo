@@ -4,9 +4,8 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
-from .const import CONF_PREFIX, CONF_SIGNAL, DOMAIN
+from .const import CONF_SIGNAL, DOMAIN
 from .coordinator import CezHdoCoordinator
-from .utils import object_prefix
 
 
 class CezHdoBaseEntity(CoordinatorEntity[CezHdoCoordinator]):
@@ -31,12 +30,9 @@ class CezHdoBaseEntity(CoordinatorEntity[CezHdoCoordinator]):
         self._description = description
         self._entry = entry
         self._signal = entry.data[CONF_SIGNAL]
-        prefix: str = object_prefix(
-            entry.options.get(CONF_PREFIX, "") or "", self._signal
-        )
 
         # Stable unique_id for entity registry
-        self._attr_unique_id = f"{prefix}_{description}"
+        self._attr_unique_id = f"{self._coordinator.base_object_prefix}_{description}"
 
         # Group into a single device
         self._attr_device_info = DeviceInfo(
