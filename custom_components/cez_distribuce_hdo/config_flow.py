@@ -15,7 +15,7 @@ from cez_distribution_hdo import TariffService
 from .const import CONF_EAN, CONF_PREFIX, CONF_SIGNAL, DEFAULT_PREFIX, DOMAIN
 
 EAN_RE = re.compile(r"^8591824\d\d[45678]\d{8}$")
-PREFIX_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_-]{0,31}$")  # max 32 chars
+PREFIX_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_ -]{1,28}[A-Za-z0-9_-]$")  # max 30 chars
 
 
 class CezDistributionHdoConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
@@ -75,7 +75,7 @@ class CezDistributionHdoConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             # Unique config entry per (EAN + signal)
             await self.async_set_unique_id(f"{ean}:{signal}")
             self._abort_if_unique_id_configured()
-
+            prefix = prefix or DEFAULT_PREFIX
             data = {
                 CONF_EAN: ean,
                 CONF_SIGNAL: signal,
@@ -84,43 +84,8 @@ class CezDistributionHdoConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 CONF_PREFIX: prefix,
             }
 
-            # Avoid putting full EAN into the entry title (keep it simple)
-            # sig = sanitize_signal_for_entity(signal)  # a1b4pd04 -> a1b4pd04 (sanitized)
-            prefix = prefix or DEFAULT_PREFIX
-            title = f"{prefix}"
-            return self.async_create_entry(title=title, data=data, options=options)
+            return self.async_create_entry(title=prefix, data=data, options=options)
 
         schema = vol.Schema({vol.Required(CONF_SIGNAL): vol.In(signals)})
 
         return self.async_show_form(step_id="signal", data_schema=schema, errors=errors)
-
-    @staticmethod
-    def async_get_options_flow(config_entry: config_entries.ConfigEntry):
-        return CezDistributionHdoOptionsFlow(config_entry)
-
-
-class CezDistributionHdoOptionsFlow(config_entries.OptionsFlow):
-    def __init__(self, entry: config_entries.ConfigEntry) -> None:
-        self.entry = entry
-
-    async def async_step_init(self, user_input: dict[str, Any] | None = None):
-        errors: dict[str, str] = {}
-
-        if user_input is not None:
-            prefix = cast(str, user_input.get(CONF_PREFIX, "")).strip()
-
-            if prefix and not PREFIX_RE.match(prefix):
-                errors[CONF_PREFIX] = "invalid_prefix"
-            else:
-                return self.async_create_entry(title="", data={CONF_PREFIX: prefix})
-
-        schema = vol.Schema(
-            {
-                vol.Optional(
-                    CONF_PREFIX,
-                    default=self.entry.options.get(CONF_PREFIX, ""),
-                ): cv.string,
-            }
-        )
-
-        return self.async_show_form(step_id="init", data_schema=schema, errors=errors)

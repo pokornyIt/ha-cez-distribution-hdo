@@ -123,10 +123,13 @@ async def async_setup_entry(
     async_add_entities: AddEntitiesCallback,
 ) -> None:
     coordinator: CezHdoCoordinator = hass.data[DOMAIN][entry.entry_id]
-    for desc in SENSOR_DESCRIPTIONS:
-        async_add_entities(
-            [CezHdoSensorEntity(coordinator=coordinator, entry=entry, description=desc)]
-        )
+    async_add_entities(
+        [
+            CezHdoSensorEntity(coordinator=coordinator, entry=entry, description=desc)
+            for desc in SENSOR_DESCRIPTIONS
+        ],
+        update_before_add=True,
+    )
 
 
 class CezHdoSensorEntity(CezHdoBaseEntity, SensorEntity):
@@ -138,7 +141,7 @@ class CezHdoSensorEntity(CezHdoBaseEntity, SensorEntity):
         entry: ConfigEntry,
         description: CezHdoSensorDescription,
     ) -> None:
-        super().__init__(coordinator, entry, description.key)
+        super().__init__(coordinator, entry, description)
         self.entity_description = description
 
     @property

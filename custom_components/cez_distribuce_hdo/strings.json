@@ -37,41 +37,5 @@
         }
       }
     }
-  },
-  "entity": {
-    "binary_sensor": {
-      "low_tariff": {
-        "name": "Low tariff"
-      }
-    },
-    "sensor": {
-      "actual_tariff": {
-        "name": "Actual tariff"
-      },
-      "actual_tariff_start": {
-        "name": "Actual tariff start"
-      },
-      "actual_tariff_end": {
-        "name": "Actual tariff end"
-      },
-      "next_low_tariff_start": {
-        "name": "Next low tariff start"
-      },
-      "next_low_tariff_end": {
-        "name": "Next low tariff end"
-      },
-      "next_high_tariff_start": {
-        "name": "Next high tariff start"
-      },
-      "next_high_tariff_end": {
-        "name": "Next high tariff end"
-      },
-      "next_switch": {
-        "name": "Next switch"
-      },
-      "remain_actual": {
-        "name": "Remaining (actual tariff)"
-      }
-    }
   }
 }

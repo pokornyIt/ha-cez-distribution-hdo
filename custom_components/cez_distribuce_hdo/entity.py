@@ -1,6 +1,7 @@
 """Common base entity for CEZ Distribution HDO integration."""
 
 from homeassistant.config_entries import ConfigEntry
+from homeassistant.helpers.entity import EntityDescription
 from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
@@ -8,12 +9,12 @@ from .const import CONF_SIGNAL, DOMAIN
 from .coordinator import CezHdoCoordinator
 
 
-class CezHdoBaseEntity(CoordinatorEntity[CezHdoCoordinator]):
+class CezHdoBaseEntity(CoordinatorEntity):
     """Base CEZ Distribution HDO entity."""
 
     _coordinator: CezHdoCoordinator
     _attr_has_entity_name = True
-    _description: str
+    _description: EntityDescription
     _entry: ConfigEntry
     _signal: str
 
@@ -21,7 +22,7 @@ class CezHdoBaseEntity(CoordinatorEntity[CezHdoCoordinator]):
         self,
         coordinator: CezHdoCoordinator,
         entry: ConfigEntry,
-        description: str,
+        description: EntityDescription,
     ) -> None:
         """Initialize the CEZ Distribution HDO base entity."""
         super().__init__(coordinator)
@@ -32,7 +33,9 @@ class CezHdoBaseEntity(CoordinatorEntity[CezHdoCoordinator]):
         self._signal = entry.data[CONF_SIGNAL]
 
         # Stable unique_id for entity registry
-        self._attr_unique_id = f"{self._coordinator.base_object_prefix}_{description}"
+        self._attr_unique_id = (
+            f"{self._coordinator.base_object_prefix}_{description.key}"
+        )
 
         # Group into a single device
         self._attr_device_info = DeviceInfo(

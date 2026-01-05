@@ -19,7 +19,7 @@
     },
     "error": {
       "invalid_ean": "EAN must contain exactly 18 digits.",
-      "invalid_prefix": "Prefix may contain letters, numbers, '_' or '-' (max 32 chars).",
+      "invalid_prefix": "Prefix may contain letters, numbers, space, '_' or '-' (min 3 and max 30 chars).",
       "cannot_connect": "Failed to fetch HDO schedule data.",
       "no_signals": "No HDO signals found for this EAN."
     },

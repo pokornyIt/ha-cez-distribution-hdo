@@ -19,7 +19,7 @@
         },
         "error": {
             "invalid_ean": "EAN musí mít přesně 18 číslic.",
-            "invalid_prefix": "Prefix může obsahovat písmena, čísla, '_' nebo '-' (max 32 znaků).",
+            "invalid_prefix": "Prefix může obsahovat písmena, čísla, mezery, '_' nebo '-' (min 3 a max 30 znaků).",
             "cannot_connect": "Nepodařilo se načíst data o časech spínání.",
             "no_signals": "Pro zadané EAN nebyly nalezeny žádné HDO signály."
         },
