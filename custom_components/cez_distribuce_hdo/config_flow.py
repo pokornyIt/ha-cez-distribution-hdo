@@ -10,9 +10,9 @@ import voluptuous as vol
 from homeassistant import config_entries
 from homeassistant.helpers import config_validation as cv
 
-from cez_distribution_hdo import TariffService
+from cez_distribution_hdo import TariffService, sanitize_signal_for_entity
 
-from .const import CONF_EAN, CONF_PREFIX, CONF_SIGNAL, DOMAIN
+from .const import CONF_EAN, CONF_PREFIX, CONF_SIGNAL, DEFAULT_PREFIX, DOMAIN
 
 EAN_RE = re.compile(r"^\d{18}$")
 PREFIX_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_-]{0,31}$")  # max 32 chars
@@ -28,7 +28,7 @@ class CezDistributionHdoConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
         if user_input is not None:
             ean = cast(str, user_input[CONF_EAN]).strip()
-            prefix = cast(str, user_input.get(CONF_PREFIX, "")).strip()
+            prefix = cast(str, user_input.get(CONF_PREFIX, DEFAULT_PREFIX)).strip()
 
             if not EAN_RE.match(ean):
                 errors[CONF_EAN] = "invalid_ean"
@@ -56,7 +56,7 @@ class CezDistributionHdoConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         schema = vol.Schema(
             {
                 vol.Required(CONF_EAN): cv.string,
-                vol.Optional(CONF_PREFIX, default=""): cv.string,
+                vol.Optional(CONF_PREFIX, default=DEFAULT_PREFIX): cv.string,
             }
         )
 
@@ -66,7 +66,7 @@ class CezDistributionHdoConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         errors: dict[str, str] = {}
 
         ean = cast(str, self.context["ean"])  # type: ignore
-        prefix = cast(str, self.context.get("prefix", ""))
+        prefix = cast(str, self.context.get("prefix", DEFAULT_PREFIX))
         signals = cast(list[str], self.context["signals"])  # type: ignore
 
         if user_input is not None:
@@ -85,7 +85,9 @@ class CezDistributionHdoConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             }
 
             # Avoid putting full EAN into the entry title (keep it simple)
-            title = f"{prefix + ' ' if prefix else ''}{signal}".strip()
+            sig = sanitize_signal_for_entity(signal)  # a1b4pd04 -> a1b4pd04 (sanitized)
+            prefix = prefix or DEFAULT_PREFIX
+            title = f"{prefix}_{sig}"
             return self.async_create_entry(title=title, data=data, options=options)
 
         schema = vol.Schema({vol.Required(CONF_SIGNAL): vol.In(signals)})

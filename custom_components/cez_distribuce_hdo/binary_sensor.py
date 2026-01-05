@@ -74,7 +74,7 @@ class CezHdoBinaryEntity(CoordinatorEntity[CezHdoCoordinator], BinarySensorEntit
 
         # Group into a single device
         self._attr_device_info = DeviceInfo(
-            identifiers={(DOMAIN, coordinator.device_identifier)},
+            identifiers={(DOMAIN, entry.entry_id)},
             name=coordinator.base_object_prefix,
             manufacturer="ČEZ Distribuce",
             model="HDO",

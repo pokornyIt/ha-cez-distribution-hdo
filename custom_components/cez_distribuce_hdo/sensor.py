@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from datetime import datetime
+from math import e
 from typing import Any, Callable
 
 from homeassistant.components.sensor import (
@@ -156,7 +157,7 @@ class CezHdoSensorEntity(CoordinatorEntity[CezHdoCoordinator], SensorEntity):
         )
 
         self._attr_device_info = DeviceInfo(
-            identifiers={(DOMAIN, coordinator.device_identifier)},
+            identifiers={(DOMAIN, entry.entry_id)},
             name=coordinator.base_object_prefix,
             manufacturer="ČEZ Distribuce",
             model="HDO",
