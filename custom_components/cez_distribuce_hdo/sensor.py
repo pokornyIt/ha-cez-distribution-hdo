@@ -14,14 +14,12 @@ from homeassistant.components.sensor import (
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import UnitOfTime
 from homeassistant.core import HomeAssistant
-from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.util import dt as dt_util
 
-from .const import CONF_PREFIX, CONF_SIGNAL, DOMAIN
+from .const import DOMAIN
 from .coordinator import CezHdoCoordinator
 from .entity import CezHdoBaseEntity
-from .utils import object_prefix
 
 
 @dataclass(frozen=True, kw_only=True)
