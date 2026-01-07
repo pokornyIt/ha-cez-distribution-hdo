@@ -10,7 +10,7 @@
   "iot_class": "cloud_polling",
   "issue_tracker": "https://github.com/pokornyIt/ha-cez-distribution-hdo/issues",
   "requirements": [
-    "cez-distribution-hdo==0.2.0"
+    "cez-distribution-hdo==0.3.0"
   ],
   "version": "0.3.0-rc1"
 }
