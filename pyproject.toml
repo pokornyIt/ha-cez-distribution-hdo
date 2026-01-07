@@ -7,7 +7,7 @@ authors = [
 ]
 readme = "README.md"
 requires-python = ">=3.13.2"
-dependencies = ["homeassistant>=2025.12.0", "cez-distribution-hdo ~=0.2.0"]
+dependencies = ["homeassistant>=2025.12.0", "cez-distribution-hdo ~=0.3.0"]
 
 [dependency-groups]
 dev = ["homeassistant-stubs>=2025.12.0", "ruff ~=0.14.0", "pyright ~=1.1"]
