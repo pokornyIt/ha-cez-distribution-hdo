@@ -1,0 +1,1 @@
+"""Tests for CEZ Distribuce HDO coordinator."""

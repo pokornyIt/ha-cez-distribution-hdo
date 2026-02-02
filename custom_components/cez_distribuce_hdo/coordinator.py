@@ -61,7 +61,7 @@ class CezHdoCoordinator(DataUpdateCoordinator[dict[str, Any]]):
 
     @property
     def base_object_prefix(self) -> str:
-        return object_prefix(self.prefix, self.signal)
+        return object_prefix(self.prefix, self.signal, split="_")
 
     @property
     def device_identifier(self) -> str:
