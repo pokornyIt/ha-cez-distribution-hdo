@@ -4,6 +4,10 @@
 [![GitHub Release](https://img.shields.io/github/v/release/pokornyIt/ha-cez-distribution-hdo)](https://github.com/pokornyIt/ha-cez-distribution-hdo/releases)
 [![License](https://img.shields.io/github/license/pokornyIt/ha-cez-distribution-hdo)](LICENSE)
 
+> [!CAUTION]
+> This project was terminated and replaced by an integration developed by the community: [ČEZ HDO](https://github.com/Cmajda/ha_cez_distribuce).
+> We recommend switching to this new integration, which offers more options and active development.
+
 Home Assistant custom integration for **ČEZ Distribuce HDO** tariff switching schedules (NT/VT).
 The integration uses the Python library `cez-distribution-hdo` to fetch schedule data and expose it as entities.
 

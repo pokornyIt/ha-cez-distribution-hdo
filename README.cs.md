@@ -5,7 +5,7 @@
 [![License](https://img.shields.io/github/license/pokornyIt/ha-cez-distribution-hdo)](LICENSE)
 
 > [!CAUTION]
-> Tento projekt byl nahdazen jednotnou integrací vyvýjenou komunitou: [ČEZ HDO](https://github.com/Cmajda/ha_cez_distribuce).  
+> Tento projekt byl ukončen a nahdazen integrací vyvýjenou komunitou: [ČEZ HDO](https://github.com/Cmajda/ha_cez_distribuce).  
 > Doporučujeme přejít na tuto novou integraci, která nabízí širší možnosti a aktivní vývoj.
 
 Vlastní integrace pro Home Assistant pro **ČEZ Distribuce HDO** (přepínání tarifu NT/VT).
