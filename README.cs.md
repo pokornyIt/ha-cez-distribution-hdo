@@ -4,6 +4,10 @@
 [![GitHub Release](https://img.shields.io/github/v/release/pokornyIt/ha-cez-distribution-hdo)](https://github.com/pokornyIt/ha-cez-distribution-hdo/releases)
 [![License](https://img.shields.io/github/license/pokornyIt/ha-cez-distribution-hdo)](LICENSE)
 
+> [!CAUTION]
+> Tento projekt byl nahdazen jednotnou integrací vyvýjenou komunitou: [ČEZ HDO](https://github.com/Cmajda/ha_cez_distribuce).  
+> Doporučujeme přejít na tuto novou integraci, která nabízí širší možnosti a aktivní vývoj.
+
 Vlastní integrace pro Home Assistant pro **ČEZ Distribuce HDO** (přepínání tarifu NT/VT).
 Integrace používá Python knihovnu `cez-distribution-hdo`, která načte rozpis spínání a spočítá aktuální stav i následující okna.
 
